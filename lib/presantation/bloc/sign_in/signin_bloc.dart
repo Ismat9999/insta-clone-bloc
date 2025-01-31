@@ -15,27 +15,23 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   bool isLoading = false;
 
-  SignInBloc() : super(SignInInitialState()) {
-    on<CallSignUpEvent>(_onCallSignUpEvent);
-  }
+  SignInBloc() : super(SignInInitialState());
 
-  Future<void>_onCallSignUpEvent(CallSignUpEvent event, Emitter<SignInState> emit)async{
-    emit(SignInInitialState());
-  }
-
-  void callHomePage(BuildContext context){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
+  void callHomePage(BuildContext context) {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) {
       return BlocProvider(
-        create: (context)=> HomeBloc(),
+        create: (context) => HomeBloc(),
         child: HomePage(),
       );
     }));
   }
 
-  void callSignUpPage(BuildContext context){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
+  void callSignUpPage(BuildContext context) {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) {
       return BlocProvider(
-        create: (context)=> SignUpBloc(),
+        create: (context) => SignUpBloc(),
         child: SignUpPage(),
       );
     }));
