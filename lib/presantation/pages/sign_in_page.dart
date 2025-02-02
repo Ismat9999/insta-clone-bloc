@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/sign_in/signin_event.dart';
 import 'package:instaclonebloc/presantation/bloc/sign_in/signin_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/sign_in/signin_state.dart';
 
@@ -12,6 +13,12 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   late SignInBloc signInBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    signInBloc= context.read<SignInBloc>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +95,7 @@ class _SignInPageState extends State<SignInPage> {
                           //   signIn
                           GestureDetector(
                             onTap: (){
-                              signInBloc.callHomePage(context);
+                              signInBloc.doSignIn(context);
                             },
                             child: Container(
                               margin: EdgeInsets.only(top: 10),

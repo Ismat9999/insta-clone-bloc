@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "285125000262",
+    "project_id": "instaclone-bloc",
+    "storage_bucket": "instaclone-bloc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285125000262:android:a083ffb9a1b84af7855e47",
+        "android_client_info": {
+          "package_name": "com.nextgen.instaclonebloc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYuDAcDje9icwN_UHLL_v1tMqXVmoUGAM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

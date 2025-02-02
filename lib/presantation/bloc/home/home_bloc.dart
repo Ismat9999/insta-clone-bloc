@@ -11,10 +11,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState>{
   HomeBloc(): super(CurrentIndexState(currentIndex: 0));
 
   void onBottomChange(int index) {
+    currentTap= index;
     emit(CurrentIndexState(currentIndex: index));
   }
 
   void onPageViewChange(int index) {
+    currentTap= index;
     emit(CurrentIndexState(currentIndex: index));
   }
 }

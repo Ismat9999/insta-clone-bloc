@@ -2,7 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/home/home_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/home/home_event.dart';
 import 'package:instaclonebloc/presantation/bloc/home/home_state.dart';
+import 'package:instaclonebloc/presantation/bloc/myfeed/my_feed_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/mylikes/my_likes_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/myprofile/my_profile_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/mysearch/my_search_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/myupload/my_upload_bloc.dart';
+import 'package:instaclonebloc/presantation/pages/support_page/my_feed_page.dart';
+import 'package:instaclonebloc/presantation/pages/support_page/my_likes_page.dart';
+import 'package:instaclonebloc/presantation/pages/support_page/my_profile_page.dart';
+import 'package:instaclonebloc/presantation/pages/support_page/my_search_page.dart';
+import 'package:instaclonebloc/presantation/pages/support_page/my_upload_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,39 +38,35 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state) {
         return Scaffold(
           body: PageView(
-            onPageChanged: (int index) {
+            onPageChanged: (index) {
               homeBloc.onPageViewChange(index);
             },
             controller: pageController,
             children: [
-              // MyFeedPage(
-              //   // pageController: homeController.pageController,
-              // ),
-              // MySearchPage(),
-              // MyUploadPage(
-              //   // pageController: homeController.pageController,
-              // ),
-              // MyLikesPage(),
-              // MyProfilePage(),
-              Container(
-                color: Colors.purple,
+              BlocProvider(
+                create: (context)=>MyFeedBloc(),
+                child: MyFeedPage(pageController: pageController,),
               ),
-              Container(
-                color: Colors.blue,
+              BlocProvider(
+                create: (context)=>MySearchBloc(),
+                child: MySearchPage(),
               ),
-              Container(
-                color: Colors.red,
+              BlocProvider(
+                create: (context)=>MyUploadBloc(),
+                child: MyUploadPage(pageController: pageController),
               ),
-              Container(
-                color: Colors.green,
+              BlocProvider(
+                create: (context)=>MyLikesBloc(),
+                child: MyLikesPage(),
               ),
-              Container(
-                color: Colors.grey,
+              BlocProvider(
+                create: (context)=>MyProfileBloc(),
+                child: MyProfilePage(),
               ),
             ],
           ),
           bottomNavigationBar: CupertinoTabBar(
-            onTap: (int index) {
+            onTap: (index) {
               homeBloc.onBottomChange(index);
               pageController.animateToPage(index,
                   duration: Duration(milliseconds: 200), curve: Curves.easeIn);
