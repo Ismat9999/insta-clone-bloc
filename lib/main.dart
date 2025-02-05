@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instaclonebloc/core/services/notif_service.dart';
 import 'package:instaclonebloc/presantation/bloc/splash/splash_bloc.dart';
 import 'package:instaclonebloc/presantation/pages/splash_page.dart';
 
@@ -15,6 +16,7 @@ void main()async {
       storageBucket: "instaclone-bloc.firebasestorage.app",
     ),
   );
+ await NotifService().init();
   runApp(const MyApp());
 }
 
