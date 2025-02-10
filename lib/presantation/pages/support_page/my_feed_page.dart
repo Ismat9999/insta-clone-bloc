@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instaclonebloc/main.dart';
 import 'package:instaclonebloc/presantation/bloc/myfeed/my_feed_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myfeed/my_feed_state.dart';
 
-import '../../bloc/myfeed/my_feed_event.dart';
 import '../../widgets/items/item_of_post.dart';
 
 

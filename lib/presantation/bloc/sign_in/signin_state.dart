@@ -1,14 +1,13 @@
 abstract class SignInState {}
 
-class SignInInitialState extends SignInState{
-  @override
-  List<Object?> get props => [];
-}
-class SignInLoadState extends SignInState{
-  @override
-  List<Object?> get props => [];
-}
-class SignInSuccsesState extends SignInState{
-  @override
-  List<Object?> get props => [];
+class SignInInitialState extends SignInState {}
+
+class SignInLoadingState extends SignInState {}
+
+class SignInSuccsesState extends SignInState {}
+
+class SignInFailureState extends SignInState {
+  final String errorMessage;
+
+  SignInFailureState(this.errorMessage);
 }

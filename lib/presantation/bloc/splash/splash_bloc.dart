@@ -19,30 +19,26 @@ import '../../../data/datasources/remote/local/prefs_service.dart';
 import '../../pages/sign_in_page.dart';
 
 class SplashBloc extends Bloc<SplashEvent, SplashState> {
-  SplashBloc() : super(StarterInitialState()) {
-    on<CallPageEvent>(_onStartPageEvent);
+  SplashBloc() : super(SplashLoadedState()) {
+    on<SplashWaitEvent>(_onSplashWaitEvent);
   }
 
-  Future<void> _onStartPageEvent(
-      CallPageEvent event, Emitter<SplashState> emit) async {
-    emit(StarterInitialState());
-  }
-
-  void initTimer(BuildContext context) {
-    Timer(const Duration(seconds: 2), () {
-      callNextPage(context);
-    });
+  Future<void> _onSplashWaitEvent(
+      SplashWaitEvent event, Emitter<SplashState> emit) async {
+    emit(SplashLoadingState());
+    await Future.delayed(Duration(seconds: 2));
+    emit(SplashLoadedState());
   }
 
   callNextPage(BuildContext context) {
     if (AuthService.isLoggedIn()) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) {
-        return BlocProvider(
-          create: (context) => HomeBloc(),
-          child: HomePage(),
-        );
-      }));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BlocProvider(
+                    create: (context) => HomeBloc(),
+                    child: HomePage(),
+                  )));
     } else {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (BuildContext context) {
@@ -53,8 +49,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       }));
     }
   }
-  void loadDeviceParams()async{
-    var result =await UtilsService.deviceUniqueId();
+
+  void loadDeviceParams() async {
+    var result = await UtilsService.deviceUniqueId();
     LogService.i(result.toString());
   }
 

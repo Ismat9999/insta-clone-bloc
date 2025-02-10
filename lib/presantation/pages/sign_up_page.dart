@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:instaclonebloc/main.dart';
-import 'package:instaclonebloc/presantation/bloc/sign_in/signin_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/sign_up/signup_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/sign_up/signup_event.dart';
 import 'package:instaclonebloc/presantation/bloc/sign_up/signup_state.dart';

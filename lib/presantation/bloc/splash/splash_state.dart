@@ -1,6 +1,7 @@
 abstract class SplashState {}
 
-class StarterInitialState extends SplashState {
-  @override
-  List<Object?> get props => [];
-}
+class SplashInitialState extends SplashState {}
+
+class SplashLoadingState extends SplashState {}
+
+class SplashLoadedState extends SplashState {}

@@ -9,7 +9,6 @@ import 'package:instaclonebloc/presantation/pages/home_page.dart';
 import 'package:instaclonebloc/presantation/pages/sign_up_page.dart';
 
 import '../../../core/services/auth_service.dart';
-import '../../../core/services/utils_service.dart';
 import '../../../data/datasources/remote/local/prefs_service.dart';
 import '../sign_up/signup_bloc.dart';
 
@@ -17,54 +16,51 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
-  bool isLoading = false;
-
-  SignInBloc() : super(SignInInitialState()){
-    on<CallHomeEvent>(_onCallHomeEvent);
+  SignInBloc() : super(SignInInitialState()) {
+    on<SignedInEvent>(_onSignedInEvent);
   }
 
-  Future<void>_onCallHomeEvent(CallHomeEvent event, Emitter<SignInState> emit)async{
+  Future<void> _onSignedInEvent(
+      SignedInEvent event, Emitter<SignInState> emit) async {
     emit(SignInInitialState());
+    User? firebaseUser = await AuthService.signInUser(
+        event.context, event.email, event.password);
+
+    if (firebaseUser != null) {
+       await PrefsService.saveUserId(firebaseUser.uid);
+      emit(SignInSuccsesState());
+    } else {
+      emit(SignInFailureState("Please check your email and password again!"));
+    }
   }
 
   void callHomePage(BuildContext context) {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) {
-      return BlocProvider(
-        create: (context) => HomeBloc(),
-        child: HomePage(),
-      );
-    }));
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => HomeBloc(),
+                  child: HomePage(),
+                )));
   }
 
   void callSignUpPage(BuildContext context) {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) {
-      return BlocProvider(
-        create: (context) => SignUpBloc(),
-        child: SignUpPage(),
-      );
-    }));
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => SignUpBloc(),
+                  child: SignUpPage(),
+                )));
   }
-  void doSignIn(BuildContext context) async {
+
+   void doSignIn(BuildContext context) async {
     String email = emailController.text.toString().trim();
     String password = passwordController.text.toString().trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      return;
-    }
+    if (email.isEmpty || password.isEmpty) return;
 
-    isLoading = true;
-
-    User? firebaseUser =await AuthService.signInUser(context, email, password);
-
-    if(firebaseUser != null) {
-      PrefsService.saveUserId(firebaseUser.uid);
-      callHomePage(context);
-    }else{
-      UtilsService.fireToast("Please check your email and password again!");
-    }
-
-    isLoading = false;
+    add(SignedInEvent(context: context, email: email, password: password));
   }
-}
+  }
+
