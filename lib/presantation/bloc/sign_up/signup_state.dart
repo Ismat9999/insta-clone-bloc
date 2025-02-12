@@ -1,10 +1,13 @@
-abstract class SignUpState{}
+abstract class SignUpState {}
 
-class SignUpInitialState extends SignUpState{
-  @override
-  List<Object?> get props => [];
-}
-class SignUpSuccsesState extends SignUpState{
-  @override
-  List<Object?> get props => [];
+class SignUpInitialState extends SignUpState {}
+
+class SignUpLoadingState extends SignUpState {}
+
+class SignUpSuccsesState extends SignUpState {}
+
+class SignUpFailureState extends SignUpState {
+  final String errorMessage;
+
+  SignUpFailureState(this.errorMessage);
 }

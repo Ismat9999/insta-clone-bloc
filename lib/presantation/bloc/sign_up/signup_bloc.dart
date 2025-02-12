@@ -15,38 +15,60 @@ import '../../pages/sign_in_page.dart';
 import '../home/home_bloc.dart';
 import '../sign_in/signin_bloc.dart';
 
-class SignUpBloc extends Bloc<SignUpEvent, SignUpState>{
-  var emailController= TextEditingController();
-  var passwordController= TextEditingController();
-  var fullnameController =TextEditingController();
-  var cpasswordController=TextEditingController();
+class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var fullnameController = TextEditingController();
+  var cpasswordController = TextEditingController();
 
-  bool isLoading= false;
-  
-  SignUpBloc(): super(SignUpInitialState()){
-    on<CallHomePageEvent>(_onCallHomePageEvent);
+  bool isLoading = false;
+
+  SignUpBloc() : super(SignUpInitialState()) {
+    on<SignedUpEvent>(_onSignedUpEvent);
   }
 
-  Future<void>_onCallHomePageEvent(CallHomePageEvent event, Emitter<SignUpState> emit)async{
-    emit(SignUpInitialState());
+  Future<void> _onSignedUpEvent(
+      SignedUpEvent event, Emitter<SignUpState> emit) async {
+    emit(SignUpLoadingState());
+    User? firebaseUser = await AuthService.signUpUser(
+        event.context, event.email, event.password);
+
+    if (firebaseUser != null) {
+      _saveMemberIdToLocal(firebaseUser);
+      _saveMemberToCloud(Member(event.fullname, event.email));
+      emit(SignUpSuccsesState());
+    } else {
+      emit(SignUpFailureState("Please check your information!"));
+    }
   }
 
-  void callHomePage(BuildContext context){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
+  _saveMemberIdToLocal(User firebaseUser) async {
+    await PrefsService.saveUserId(firebaseUser.uid);
+  }
+
+  _saveMemberToCloud(Member member) async {
+    await DBService.storeMember(member);
+  }
+
+  void callHomePage(BuildContext context) {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) {
       return BlocProvider(
-        create: (context)=> HomeBloc(),
+        create: (context) => HomeBloc(),
         child: HomePage(),
       );
     }));
   }
 
-  void callSignUpPage(BuildContext context){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
-      return BlocProvider(
-        create: (context)=> SignInBloc(),
-        child: SignInPage(),
-      );
-    }));
+  void callSignInPage(BuildContext context) {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => SignInBloc(),
+            child: SignInPage(),
+          ),
+        ));
   }
 
   void doSignUp(BuildContext context) async {
@@ -55,30 +77,18 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState>{
     String password = passwordController.text.toString().trim();
     String cpassword = cpasswordController.text.toString().trim();
 
-    if (fullname.isEmpty || email.isEmpty || password.isEmpty ||
-        cpassword.isEmpty){
+    if (fullname.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        cpassword.isEmpty) {
       UtilsService.fireToast("Please fill out your information!");
       return;
     }
 
-    if (password != cpassword){
+    if (password != cpassword) {
       UtilsService.fireToast("Your password did not match!");
       return;
     }
-
-    isLoading= true;
-
-    User? firebaseUser= await AuthService.signUpUser(context, email, password);
-
-    if(firebaseUser != null){
-      PrefsService.saveUserId(firebaseUser.uid);
-      Member member=Member(fullname, email);
-      await DBService.storeMember(member);
-      callHomePage(context);
-    }else {
-      UtilsService.fireToast("Please check your information!");
-    }
-
-    isLoading =false;
+    add(SignedUpEvent(context: context, fullname: fullname, email: email, password: password));
   }
 }
