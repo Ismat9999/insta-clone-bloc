@@ -1,16 +1,13 @@
 abstract class MyUploadState {}
 
-class  UploadInitialState extends MyUploadState{
-  @override
-  List<Object?> get props => [];
-}
+class UploadInitialState extends MyUploadState {}
 
-class  UploadLoadingState extends MyUploadState{
-  @override
-  List<Object?> get props => [];
-}
+class UploadLoadingState extends MyUploadState {}
 
-class  UploadSuccsesState extends MyUploadState{
-  @override
-  List<Object?> get props => [];
+class UploadSuccsesState extends MyUploadState {}
+
+class UploadFailureState extends MyUploadState {
+  final String errorMessage;
+
+  UploadFailureState(this.errorMessage);
 }
