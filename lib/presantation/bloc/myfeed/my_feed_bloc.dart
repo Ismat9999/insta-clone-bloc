@@ -20,7 +20,7 @@ class MyFeedBloc extends Bloc<MyFeedEvent, MyFeedState> {
     var results = await DBService.loadFeeds();
     items = results;
     isLoading = false;
-    emit(FeedSuccsesState());
+
   }
 
   apiLikePost(Post post) async {
@@ -30,7 +30,7 @@ class MyFeedBloc extends Bloc<MyFeedEvent, MyFeedState> {
     await DBService.likePost(post, true);
     post.liked = true;
     isLoading = false;
-    emit(FeedSuccsesState());
+
   }
 
   apiUnlikePost(Post post) async {
@@ -41,12 +41,12 @@ class MyFeedBloc extends Bloc<MyFeedEvent, MyFeedState> {
 
     post.liked = false;
     isLoading = false;
-    emit(FeedSuccsesState());
+
   }
 
   apiRemovePost(Post post) async {
     isLoading = true;
-    emit(FeedSuccsesState());
+
 
     await DBService.removePosts(post);
 

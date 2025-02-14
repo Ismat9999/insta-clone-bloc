@@ -1,6 +1,20 @@
-abstract class MyFeedEvent {}
+import 'package:equatable/equatable.dart';
+import 'package:instaclonebloc/data/models/post_model.dart';
 
-class FeedPostsEvent extends MyFeedEvent{
+abstract class MyFeedEvent extends Equatable {
+  const MyFeedEvent();
+}
+
+class LoadFeedPostsEvent extends MyFeedEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class RemoveFeedPostsEvent extends MyFeedEvent {
+  Post post;
+
+  RemoveFeedPostsEvent({required this.post});
+
   @override
   List<Object?> get props => [];
 }
