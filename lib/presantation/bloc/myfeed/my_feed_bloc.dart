@@ -11,53 +11,35 @@ class MyFeedBloc extends Bloc<MyFeedEvent, MyFeedState> {
   bool isLoading = false;
   List<Post> items = [];
 
-  MyFeedBloc() : super(FeedInitialState());
-
-  apiLoadMyFeed() async {
-    isLoading = true;
-    emit(FeedLoadingState());
-
-    var results = await DBService.loadFeeds();
-    items = results;
-    isLoading = false;
-
+  MyFeedBloc() : super(FeedInitialState()) {
+    on<LoadFeedPostsEvent>(_onLoadFeedPostsEvent);
+    on<RemoveFeedPostsEvent>(_onRemoveFeedPostsEvent);
   }
 
-  apiLikePost(Post post) async {
-    isLoading = true;
+  Future<void> _onLoadFeedPostsEvent(
+      LoadFeedPostsEvent event, Emitter<MyFeedState> emit) async {
     emit(FeedLoadingState());
-
-    await DBService.likePost(post, true);
-    post.liked = true;
-    isLoading = false;
-
+    var posts = await DBService.loadFeeds();
+    items.clear();
+    items.addAll(posts);
+    if (posts.isNotEmpty) {
+      emit(FeedSuccsesState(items: items));
+    } else {
+      emit(FeedFailureState("No data"));
+    }
   }
 
-  apiUnlikePost(Post post) async {
-    isLoading = true;
+  Future<void> _onRemoveFeedPostsEvent(RemoveFeedPostsEvent event, Emitter<MyFeedState> emit) async {
     emit(FeedLoadingState());
-
-    await DBService.likePost(post, false);
-
-    post.liked = false;
-    isLoading = false;
-
-  }
-
-  apiRemovePost(Post post) async {
-    isLoading = true;
-
-
-    await DBService.removePosts(post);
-
-    apiLoadMyFeed();
+    await DBService.removePosts(event.post);
+    emit(RemoveFeedPostsState());
   }
 
   void dialogRemovePost(BuildContext context, Post post) async {
     var result = await UtilsService.dialogCommon(
         context, "Remove", "Do you want to remove this post?", false);
     if (result) {
-      apiRemovePost(post);
+      add(LoadFeedPostsEvent());
     }
   }
 }

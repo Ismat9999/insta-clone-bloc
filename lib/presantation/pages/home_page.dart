@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/home/home_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/home/home_state.dart';
+import 'package:instaclonebloc/presantation/bloc/myfeed/like_post_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myfeed/my_feed_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/mylikes/my_likes_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myprofile/my_profile_bloc.dart';
@@ -37,81 +38,89 @@ class _HomePageState extends State<HomePage> {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
         return Scaffold(
-            body: PageView(
-                onPageChanged: (index) {
-                  homeBloc.onPageViewChange(index);
-                },
-                controller: pageController,
-                children: [
-                BlocProvider(
-                create: (context) => MyFeedBloc(),
-        child: MyFeedPage(pageController: pageController,),
-        ),
-        BlocProvider(
-        create: (context) => MySearchBloc(),
-        child: MySearchPage(),
-        ),
-        MultiBlocProvider(
-        providers: [BlocProvider(
-        create: (context) => MyUploadBloc(),
-        ),
-        BlocProvider(
-        create: (context)=> PickerBloc(),
-        ),
-        ],
-        child: MyUploadPage(pageController: pageController),
-        ),
-        BlocProvider(
-        create: (context) => MyLikesBloc(),
-        child: MyLikesPage(),
-        ),
-        BlocProvider(
-        create: (context) => MyProfileBloc(),
-        child: MyProfilePage(),
-        ),
-        ],
-        ),
-        bottomNavigationBar: CupertinoTabBar(
-        onTap: (index) {
-        homeBloc.onBottomChange(index);
-        pageController.animateToPage(index,
-        duration: Duration(milliseconds: 200), curve: Curves.easeIn);
-        },
-        currentIndex: homeBloc.currentTap,
-        activeColor: Color.fromRGBO(193, 53, 132, 1),
-        items: [
-        BottomNavigationBarItem(
-        icon: Icon(
-        Icons.home,
-        size: 32,
-        ),
-        ),
-        BottomNavigationBarItem(
-        icon: Icon(
-        Icons.search,
-        size: 32,
-        ),
-        ),
-        BottomNavigationBarItem(
-        icon: Icon(
-        Icons.add_box,
-        size: 32,
-        ),
-        ),
-        BottomNavigationBarItem(
-        icon: Icon(
-        Icons.favorite,
-        size: 32,
-        ),
-        ),
-        BottomNavigationBarItem(
-        icon: Icon(
-        Icons.person,
-        size: 32,
-        ),
-        ),
-        ],
-        ),
+          body: PageView(
+            onPageChanged: (index) {
+              homeBloc.onPageViewChange(index);
+            },
+            controller: pageController,
+            children: [
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => MyFeedBloc(),
+                  ),
+                  BlocProvider(
+                    create: (context) => LikePostBloc(),
+                  ),
+                ],
+                child: MyFeedPage(pageController: pageController,),
+              ),
+              BlocProvider(
+                create: (context) => MySearchBloc(),
+                child: MySearchPage(),
+              ),
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => MyUploadBloc(),
+                  ),
+                  BlocProvider(
+                    create: (context) => PickerBloc(),
+                  ),
+                ],
+                child: MyUploadPage(pageController: pageController),
+              ),
+              BlocProvider(
+                create: (context) => MyLikesBloc(),
+                child: MyLikesPage(),
+              ),
+              BlocProvider(
+                create: (context) => MyProfileBloc(),
+                child: MyProfilePage(),
+              ),
+            ],
+          ),
+          bottomNavigationBar: CupertinoTabBar(
+            onTap: (index) {
+              homeBloc.onBottomChange(index);
+              pageController.animateToPage(index,
+                  duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+            },
+            currentIndex: homeBloc.currentTap,
+            activeColor: Color.fromRGBO(193, 53, 132, 1),
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                  size: 32,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.search,
+                  size: 32,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.add_box,
+                  size: 32,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.favorite,
+                  size: 32,
+                ),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.person,
+                  size: 32,
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
