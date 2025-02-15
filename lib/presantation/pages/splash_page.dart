@@ -20,6 +20,8 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     splashBloc= context.read<SplashBloc>();
     splashBloc.add(SplashWaitEvent());
+    splashBloc.initNotification();
+    splashBloc.loadDeviceParams();
   }
   @override
   Widget build(BuildContext context) {
