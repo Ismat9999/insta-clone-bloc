@@ -1,16 +1,23 @@
+import 'package:instaclonebloc/data/models/post_model.dart';
+
 abstract class MyLikesState {}
 
-class LikesInitialState extends MyLikesState {
-  @override
-  List<Object?> get props => [];
-}
+class LikesInitialState extends MyLikesState {}
 
-class LikesLoadingState extends MyLikesState {
-  @override
-  List<Object?> get props => [];
-}
+class LikesLoadingState extends MyLikesState {}
 
 class LikesSuccsesState extends MyLikesState {
-  @override
-  List<Object?> get props => [];
+  List<Post> items;
+
+  LikesSuccsesState({required this.items});
 }
+
+class LikesFailureState extends MyLikesState {
+  final String errorMessage;
+
+  LikesFailureState(this.errorMessage);
+}
+
+class UnLikePostSuccessState extends MyLikesState {}
+
+class RemovePostSuccessState extends MyLikesState {}

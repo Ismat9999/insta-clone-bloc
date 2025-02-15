@@ -31,10 +31,10 @@ class MyUploadBloc extends Bloc<UploadPostsEvent, MyUploadState> {
     emit(UploadSuccsesState());
   }
 
-  moveToFeedPage(PageController pageController,PickerBloc pickerBloc) {
+  moveToFeedPage(PageController pageController,PickerBloc pickerBloc, dynamic widget) {
     captionController.text = "";
     pickerBloc.add(ClearedPhotoEvent());
-    pageController.animateToPage(0,
+    widget.pageController.animateToPage(0,
         duration: Duration(milliseconds: 200), curve: Curves.easeIn);
   }
 

@@ -30,14 +30,14 @@ class _MyFeedPageState extends State<MyFeedPage> {
   Widget build(BuildContext context) {
     return BlocConsumer<MyFeedBloc, MyFeedState>(
       listener: (context, state) {},
-      builder: (context, state){
-        if(state is FeedLoadingState){
-          return viewOfFeedPage(context,feedBloc.items, feedBloc,false);
+      builder: (context, state) {
+        if (state is FeedLoadingState) {
+          return viewOfFeedPage(context, feedBloc.items, feedBloc, false,widget);
         }
         if (state is FeedSuccsesState) {
-          return viewOfFeedPage(context,feedBloc.items,feedBloc, false);
+          return viewOfFeedPage(context, feedBloc.items, feedBloc, false,widget);
         }
-        return viewOfFeedPage(context,feedBloc.items, feedBloc,true);
+        return viewOfFeedPage(context, feedBloc.items, feedBloc, true,widget);
       },
     );
   }

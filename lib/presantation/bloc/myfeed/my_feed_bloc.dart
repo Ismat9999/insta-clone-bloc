@@ -10,6 +10,7 @@ import '../../../data/models/post_model.dart';
 class MyFeedBloc extends Bloc<MyFeedEvent, MyFeedState> {
   bool isLoading = false;
   List<Post> items = [];
+  PageController pageController= PageController();
 
   MyFeedBloc() : super(FeedInitialState()) {
     on<LoadFeedPostsEvent>(_onLoadFeedPostsEvent);
@@ -38,6 +39,7 @@ class MyFeedBloc extends Bloc<MyFeedEvent, MyFeedState> {
   void dialogRemovePost(BuildContext context, Post post) async {
     var result = await UtilsService.dialogCommon(
         context, "Remove", "Do you want to remove this post?", false);
+    add(RemoveFeedPostsEvent(post: post));
     if (result) {
       add(LoadFeedPostsEvent());
     }

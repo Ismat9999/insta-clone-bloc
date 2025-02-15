@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:instaclonebloc/presantation/bloc/mylikes/my_likes_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/mylikes/my_likes_event.dart';
 
 import '../../../data/models/post_model.dart';
 
@@ -75,6 +76,10 @@ Widget itemOfLikes(Post post,MyLikesBloc likesBloc ,BuildContext context) {
         CachedNetworkImage(
           width: MediaQuery.of(context).size.width,
           imageUrl: post.img_post,
+          placeholder: (context,url)=>const Center(
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error)=> const Icon(Icons.error),
           fit: BoxFit.cover,
         ),
 
@@ -85,9 +90,7 @@ Widget itemOfLikes(Post post,MyLikesBloc likesBloc ,BuildContext context) {
               children: [
                 IconButton(
                   onPressed: () {
-                    if (post.liked) {
-                      likesBloc.apiUnlikePost(post);
-                    }
+                      likesBloc.add(UnLikePostEvent(post: post));
                   },
                   icon: post.liked
                       ? Icon(
@@ -114,9 +117,13 @@ Widget itemOfLikes(Post post,MyLikesBloc likesBloc ,BuildContext context) {
         Container(
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-          child: Text(
-            post.caption,
-            style: TextStyle(color: Colors.black, fontSize: 16),
+          child: RichText(
+            softWrap: true,
+            overflow: TextOverflow.visible,
+            text: TextSpan(
+              text:  post.caption,
+              style: TextStyle(color: Colors.black, fontSize: 16),
+            ),
           ),
         ),
       ],

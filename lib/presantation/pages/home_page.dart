@@ -7,6 +7,7 @@ import 'package:instaclonebloc/presantation/bloc/myfeed/like_post_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myfeed/my_feed_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/mylikes/my_likes_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myprofile/my_profile_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/mysearch/follow_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/mysearch/my_search_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myupload/my_upload_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myupload/picker_bloc.dart';
@@ -53,10 +54,19 @@ class _HomePageState extends State<HomePage> {
                     create: (context) => LikePostBloc(),
                   ),
                 ],
-                child: MyFeedPage(pageController: pageController,),
+                child: MyFeedPage(
+                  pageController: pageController,
+                ),
               ),
-              BlocProvider(
-                create: (context) => MySearchBloc(),
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => MySearchBloc(),
+                  ),
+                  BlocProvider(
+                    create: (context) => FollowBloc(),
+                  ),
+                ],
                 child: MySearchPage(),
               ),
               MultiBlocProvider(

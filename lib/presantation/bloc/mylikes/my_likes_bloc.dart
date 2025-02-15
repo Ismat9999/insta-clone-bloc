@@ -7,43 +7,45 @@ import '../../../core/services/utils_service.dart';
 import '../../../data/datasources/remote/services/db_service.dart';
 import '../../../data/models/post_model.dart';
 
-class MyLikesBloc extends Bloc<MyLikesEvent, MyLikesState>{
+class MyLikesBloc extends Bloc<MyLikesEvent, MyLikesState> {
   bool isLoading = false;
-  List<Post> items = [];
 
-  MyLikesBloc(): super(LikesInitialState());
-
-  apiLoadLikes() async {
-    isLoading = true;
-    emit(LikesInitialState());
-
-    var results = await DBService.loadLikes();
-    items = results;
-    isLoading = false;
-    emit(LikesSuccsesState());
+  MyLikesBloc() : super(LikesInitialState()) {
+    on<LoadLikesPostEvent>(_onLoadLikesPostEvent);
+    on<UnLikePostEvent>(_onUnLikePostEvent);
+    on<RemovePostEvent>(_onRemovePostEvent);
   }
 
-  void apiUnlikePost(Post post) async {
-    isLoading = true;
-    emit(LikesInitialState());
-
-    await DBService.likePost(post, false);
-
-    apiLoadLikes();
-  }
-  apiRemovePost(Post post) async {
-    isLoading= true;
-    emit(LikesInitialState());
-
-    await DBService.removePosts(post);
-
-    apiLoadLikes();
+  Future<void> _onLoadLikesPostEvent(
+      LoadLikesPostEvent event, Emitter<MyLikesState> emit) async {
+    emit(LikesLoadingState());
+    var items = await DBService.loadLikes();
+    if (items.isNotEmpty) {
+      emit(LikesSuccsesState(items: items));
+    } else {
+      emit(LikesFailureState("No data"));
+    }
   }
 
-  void dialogRemovePost(BuildContext context, Post post)async{
-    var result = await UtilsService.dialogCommon(context, "Remove", "Do you want to remove this post?", false);
-    if(result){
-      apiRemovePost(post);
+  Future<void> _onUnLikePostEvent(
+      UnLikePostEvent event, Emitter<MyLikesState> emit) async {
+    emit(LikesLoadingState());
+    await DBService.likePost(event.post, false);
+    emit(UnLikePostSuccessState());
+  }
+
+  _onRemovePostEvent(RemovePostEvent event, Emitter<MyLikesState> emit) async {
+    emit(LikesLoadingState());
+    await DBService.removePosts(event.post);
+    emit(RemovePostSuccessState());
+  }
+
+  void dialogRemovePost(BuildContext context, Post post) async {
+    var result = await UtilsService.dialogCommon(
+        context, "Remove", "Do you want to remove this post?", false);
+    add(LoadLikesPostEvent());
+    if (result) {
+      add(RemovePostEvent(post: post));
     }
   }
 }

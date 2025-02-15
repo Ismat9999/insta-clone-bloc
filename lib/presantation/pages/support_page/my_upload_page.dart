@@ -32,7 +32,7 @@ class _MyUploadPageState extends State<MyUploadPage> {
     return BlocConsumer<MyUploadBloc, MyUploadState>(
       listener: (context, state) {
         if (state is UploadSuccsesState) {
-          uploadBloc.moveToFeedPage(pageController, pickerBloc);
+          uploadBloc.moveToFeedPage(pageController, pickerBloc,widget);
         }
       },
       builder: (context, state) {

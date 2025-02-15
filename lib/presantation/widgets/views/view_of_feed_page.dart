@@ -5,7 +5,7 @@ import 'package:instaclonebloc/presantation/bloc/myfeed/my_feed_bloc.dart';
 import '../items/item_of_post.dart';
 
 Widget viewOfFeedPage(BuildContext context, List<Post> items,
-    MyFeedBloc feedBloc, bool isLoading) {
+    MyFeedBloc feedBloc, bool isLoading,dynamic widget) {
   return Scaffold(
     backgroundColor: Colors.white,
     appBar: AppBar(
@@ -45,3 +45,4 @@ Widget viewOfFeedPage(BuildContext context, List<Post> items,
     ),
   );
 }
+
