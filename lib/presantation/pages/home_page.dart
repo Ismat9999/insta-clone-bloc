@@ -6,6 +6,9 @@ import 'package:instaclonebloc/presantation/bloc/home/home_state.dart';
 import 'package:instaclonebloc/presantation/bloc/myfeed/like_post_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myfeed/my_feed_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/mylikes/my_likes_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/myprofile/axis_count_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/myprofile/my_photo_bloc.dart';
+import 'package:instaclonebloc/presantation/bloc/myprofile/my_post_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/myprofile/my_profile_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/mysearch/follow_bloc.dart';
 import 'package:instaclonebloc/presantation/bloc/mysearch/my_search_bloc.dart';
@@ -67,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                     create: (context) => FollowBloc(),
                   ),
                 ],
-                child: MySearchPage(),
+                child: const MySearchPage(),
               ),
               MultiBlocProvider(
                 providers: [
@@ -82,11 +85,16 @@ class _HomePageState extends State<HomePage> {
               ),
               BlocProvider(
                 create: (context) => MyLikesBloc(),
-                child: MyLikesPage(),
+                child: const MyLikesPage(),
               ),
-              BlocProvider(
-                create: (context) => MyProfileBloc(),
-                child: MyProfilePage(),
+              MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => MyProfileBloc()),
+                  BlocProvider(create: (context) => MyPostBloc()),
+                  BlocProvider(create: (context) => AxisCountBloc()),
+                  BlocProvider(create: (context) => MyPhotoBloc()),
+                ],
+                child: const MyProfilePage(),
               ),
             ],
           ),

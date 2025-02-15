@@ -1,16 +1,19 @@
+import 'package:instaclonebloc/data/models/member_model.dart';
+
 abstract class MyProfileState {}
 
-class ProfileInitialState extends MyProfileState {
-  @override
-  List<Object?> get props => [];
+class ProfileInitialState extends MyProfileState {}
+
+class ProfileLoadingState extends MyProfileState {}
+
+class ProfileLoadMemberState extends MyProfileState {
+  Member member;
+
+  ProfileLoadMemberState({required this.member});
 }
 
-class ProfileLoadingState extends MyProfileState {
-  @override
-  List<Object?> get props => [];
-}
+class ProfileLFailureState extends MyProfileState {
+  final String errorMessage;
 
-class ProfileSuccsesState extends MyProfileState {
-  @override
-  List<Object?> get props => [];
+  ProfileLFailureState(this.errorMessage);
 }

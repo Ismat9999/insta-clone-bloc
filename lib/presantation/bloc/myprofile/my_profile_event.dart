@@ -1,6 +1,10 @@
-abstract class MyProfileEvent {}
+import 'package:equatable/equatable.dart';
 
-class ProfileInfoEvent extends MyProfileEvent {
+abstract class MyProfileEvent extends Equatable{
+  const MyProfileEvent();
+}
+
+class LoadProfileMemberEvent extends MyProfileEvent {
   @override
   List<Object?> get props => [];
 }
